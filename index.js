@@ -2,7 +2,6 @@
 // モジュールのインポート
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
-const LanguageTranslatorV3 = require('watson-developer-cloud/language-translator/v3');
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
