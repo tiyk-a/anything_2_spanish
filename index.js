@@ -2,6 +2,7 @@
 // モジュールのインポート
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
+const LanguageTranslatorV3 = require('watson-developer-cloud/language-translator/v3');
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -32,11 +33,33 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
-            // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-            events_processed.push(bot.replyMessage(event.replyToken, {
+
+          const languageTranslator = new LanguageTranslatorV3({
+            version: '2019-04-02',
+            iam_apikey: process.env.IBM_KEY,
+            url: 'https://gateway-wdc.watsonplatform.net/language-translator/api',
+          });
+
+          const translateParams = {
+            text: event.message.text,
+            model_id: 'en-es',
+          };
+
+          languageTranslator.translate(translateParams)
+            .then(translationResult => {
+              console.log(JSON.stringify(translationResult, null, 2));
+              events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
-                text: "Wow I Love You!!"
-            }));
+                text: translationResult
+              }));
+            })
+            .catch(err => {
+              console.log('error:', err);
+              events_processed.push(bot.replyMessage(event.replyToken, {
+                type: "text",
+                text: "There's no need of translation, mi amor solo quedate aqui...!"
+              }));
+            });
         }else if (event.type == "message" && event.message.type == "image"){
             events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
