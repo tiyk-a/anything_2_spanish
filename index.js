@@ -49,25 +49,22 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           languageTranslator.translate(translateParams)
             .then(translationResult => {
               console.log(JSON.stringify(translationResult, null, 2));
-              translated.push(translationResult);
-              // events_processed.push(bot.replyMessage(event.replyToken, {
-              //   type: "text",
-              //   text: translationResult
-              // }));
-            })
-            .catch(err => {
-              console.log('error:', err);
-              translated.push("There's no need of translation, mi amor solo quedate aqui...!");
-              // events_processed.push(bot.replyMessage(event.replyToken, {
-              //   type: "text",
-              //   text: "There's no need of translation, mi amor solo quedate aqui...!"
-              // }));
-            });
-
-            events_processed.push(bot.replyMessage(event.replyToken, {
+              console.log(translationResult.translations.translation);
+              var translated = translationResult.translations.translation
+              // translated.push(translationResult);
+              events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
                 text: translated
               }));
+            })
+            .catch(err => {
+              console.log('error:', err);
+              // translated.push("There's no need of translation, mi amor solo quedate aqui...!");
+              events_processed.push(bot.replyMessage(event.replyToken, {
+                type: "text",
+                text: "There's no need of translation, mi amor solo quedate aqui...!"
+              }));
+            });
         }else if (event.type == "message" && event.message.type == "image"){
             events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
