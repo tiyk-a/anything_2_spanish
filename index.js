@@ -49,8 +49,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           languageTranslator.translate(translateParams)
             .then(translationResult => {
               console.log(JSON.stringify(translationResult, null, 2));
-              console.log(translationResult.body.translations.translation);
-              var translated = translationResult.translations.translation
+              console.log(translationResult.body.translation);
+              var translated = translationResult.body.translation
               // translated.push(translationResult);
               events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
