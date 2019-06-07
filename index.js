@@ -37,7 +37,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           const languageTranslator = new LanguageTranslatorV3({
             version: '2019-04-02',
             iam_apikey: process.env.IBM_KEY,
-            url: 'https://gateway-wdc.watsonplatform.net/language-translator/api',
+            url: 'https://gateway-tok.watsonplatform.net/language-translator/api',
           });
 
           const translateParams = {
