@@ -28,6 +28,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // すべてのイベント処理のプロミスを格納する配列。
     let events_processed = [];
+    let translated = [];
 
     // イベントオブジェクトを順次処理。
     req.body.events.forEach((event) => {
@@ -48,18 +49,25 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           languageTranslator.translate(translateParams)
             .then(translationResult => {
               console.log(JSON.stringify(translationResult, null, 2));
-              events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: translationResult
-              }));
+              translated.push(translationResult);
+              // events_processed.push(bot.replyMessage(event.replyToken, {
+              //   type: "text",
+              //   text: translationResult
+              // }));
             })
             .catch(err => {
               console.log('error:', err);
-              events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: "There's no need of translation, mi amor solo quedate aqui...!"
-              }));
+              translated.push("There's no need of translation, mi amor solo quedate aqui...!");
+              // events_processed.push(bot.replyMessage(event.replyToken, {
+              //   type: "text",
+              //   text: "There's no need of translation, mi amor solo quedate aqui...!"
+              // }));
             });
+
+            events_processed.push(bot.replyMessage(event.replyToken, {
+                type: "text",
+                text: translated
+              }));
         }else if (event.type == "message" && event.message.type == "image"){
             events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
