@@ -37,6 +37,17 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 type: "text",
                 text: "Wow I Love You!!"
             }));
+        }else if (event.type == "message" && event.message.type == "image"){
+            events_processed.push(bot.replyMessage(event.replyToken, {
+                type: "text",
+                text: "I got you lovely image!"
+            }));
+
+        }else if (event.type == "message" && event.message.type == "sticker"){
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                type: "text",
+                text: "Wow received you lovely sticker!!!"
+            }));
         }
     });
 
