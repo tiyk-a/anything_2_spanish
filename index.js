@@ -68,11 +68,12 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
             .then(translationResult => {
-              console.log(JSON.stringify(translationResult, null, 2));
-              events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: translationResult.translations[0].translation
-              }));
+              res_message(translationResult);
+              // console.log(JSON.stringify(translationResult, null, 2));
+              // events_processed.push(bot.replyMessage(event.replyToken, {
+              //   type: "text",
+              //   text: translationResult.translations[0].translation
+              // }));
             })
               // JUMP TO REPLY
             })
@@ -94,11 +95,12 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
             .then(translationResult => {
-              console.log(JSON.stringify(translationResult, null, 2));
-              events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: translationResult.translations[0].translation
-              }));
+              res_message(translationResult);
+              // console.log(JSON.stringify(translationResult, null, 2));
+              // events_processed.push(bot.replyMessage(event.replyToken, {
+              //   type: "text",
+              //   text: translationResult.translations[0].translation
+              // }));
             })
               // JUMP TO REPLY
             })
@@ -138,4 +140,12 @@ function error_res(err, events_processed, bot, event){
     type: "text",
     text: "There's no need of translation, mi amor solo quedate aqui...!"
   }));
-}
+};
+
+function res_message(translationResult){
+  console.log(JSON.stringify(translationResult, null, 2));
+  events_processed.push(bot.replyMessage(event.replyToken, {
+    type: "text",
+    text: translationResult.translations[0].translation
+  }));
+};
