@@ -58,13 +58,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             .then(identifiedLanguages => {
               console.log(JSON.stringify(identifiedLanguages, null, 2));
               posted_lang.push(identifiedLanguages.languages[0].language);
-              console.log(posted_lang[0]);
 
               // (2) IF THE MESSAGE WASN'T ENGLISH, TRANSLATE INTO ENGLISH
               if(posted_lang[0] != "en"){
                 // PREPARE FOR TRANSLATION
                 var from_to = posted_lang[0] + '-en'
-                console.log(from_to)
                 const translateParams = {
                 text: event.message.text,
                 model_id: from_to,
@@ -74,17 +72,33 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 languageTranslator.translate(translateParams)
 
                  // 1ST TRANSLATION RESPOND
-                .then(translationResult => {
-                  res_message(translationResult,events_processed, bot, event);
-                })
-                .catch(err => {
-                  error_res(err, events_processed, bot, event);
-                });
+                 // (3) IF THE MESSAGE CAN BE TRANSLATED INTO SPANISH
+                  .then(translationResult => {
+                    // PREPARE FOR TRANSLATION
+                    const translateParams = {
+                    text: translationResult.translations[0].translation,
+                    model_id: 'en-es',
+                    };
+
+                    // REQUEST FOR 2ND TRANSLATION
+                    languageTranslator.translate(translateParams)
+
+                    // 2ND TRANSLATION RESPOND
+                    .then(translationResult => {
+                      res_message(translationResult,events_processed, bot, event);
+                    })
+                    .catch(err => {
+                      error_res(err, events_processed, bot, event);
+                    });
+                  })
+                // (3) IF THE MESSAGE CAN'T BE TRANSLATED INTO SPANISH
+                  .catch(err => {
+                    error_res(err, events_processed, bot, event);
+                  });
               // (2) IF THE MESSAGE WAS ENGLISH, TRANSLATE IT INTO SPANISH
               }else{
                 // PREPARE FOR TRANSLATION
                 var from_to = posted_lang[0] + '-es'
-                console.log(from_to)
                 const translateParams = {
                 text: event.message.text,
                 model_id: from_to,
@@ -134,6 +148,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     );
 });
 
+
+// -----------------------------------------------------------------------------
+// FUNCTIONS FOR SUCCEESS/ERROR RESPONSE
 function error_res(err, events_processed, bot, event){
   console.log('error:', err);
   events_processed.push(bot.replyMessage(event.replyToken, {
