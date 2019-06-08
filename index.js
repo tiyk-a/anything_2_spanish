@@ -68,7 +68,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
             .then(translationResult => {
-              res_message(translationResult);
+              res_message(translationResult,events_processed, bot, event);
               // console.log(JSON.stringify(translationResult, null, 2));
               // events_processed.push(bot.replyMessage(event.replyToken, {
               //   type: "text",
@@ -95,7 +95,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
             .then(translationResult => {
-              res_message(translationResult);
+              res_message(translationResult,events_processed, bot, event);
               // console.log(JSON.stringify(translationResult, null, 2));
               // events_processed.push(bot.replyMessage(event.replyToken, {
               //   type: "text",
@@ -142,7 +142,7 @@ function error_res(err, events_processed, bot, event){
   }));
 };
 
-function res_message(translationResult){
+function res_message(translationResult,events_processed, bot, event){
   console.log(JSON.stringify(translationResult, null, 2));
   events_processed.push(bot.replyMessage(event.replyToken, {
     type: "text",
