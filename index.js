@@ -49,69 +49,45 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           };
 
           languageTranslator.identify(identifyParams)
-          //  *********************************************************************************************************************
+
+
+
+
+      //  *********************************************************************************************************************
+            // IF LANGUAGE IDENTIFIED
             .then(identifiedLanguages => {
               console.log(JSON.stringify(identifiedLanguages, null, 2));
               posted_lang.push(identifiedLanguages.languages[0].language);
               console.log(posted_lang[0]);
 
-              // JUMP TO REPLY
-              // TRANSLATE BY IBM TRANSLATOR
-            var from_to = posted_lang[0] + '-es'
-            console.log(from_to)
-            const translateParams = {
-            text: event.message.text,
-            model_id: from_to,
-            };
 
-          languageTranslator.translate(translateParams)
+              // PREPARE FOR TRANSLATION
+              var from_to = posted_lang[0] + '-es'
+              console.log(from_to)
+              const translateParams = {
+              text: event.message.text,
+              model_id: from_to,
+              };
 
-            // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
-            .then(translationResult => {
-              res_message(translationResult,events_processed, bot, event);
-              // console.log(JSON.stringify(translationResult, null, 2));
-              // events_processed.push(bot.replyMessage(event.replyToken, {
-              //   type: "text",
-              //   text: translationResult.translations[0].translation
-              // }));
-            })
-              // JUMP TO REPLY
-            })
+              // REQUEST FOR 1ST TRANSLATION
+              languageTranslator.translate(translateParams)
+
+              // 1ST TRANSLATION RESPOND
+              .then(translationResult => {
+                res_message(translationResult,events_processed, bot, event);
+              })
+              })
+
+            // IF LANGUAGE NOT IDENTIFIED
             .catch(err => {
               console.log('error:', err);
-              posted_lang.push('en');
-              console.log(posted_lang[0])
-
-              // JUMP TO REPLY
-              // TRANSLATE BY IBM TRANSLATOR
-            var from_to = posted_lang[0] + '-es'
-            console.log(from_to)
-            const translateParams = {
-            text: event.message.text,
-            model_id: from_to,
-            };
-
-          languageTranslator.translate(translateParams)
-
-            // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
-            .then(translationResult => {
-              res_message(translationResult,events_processed, bot, event);
-              // console.log(JSON.stringify(translationResult, null, 2));
-              // events_processed.push(bot.replyMessage(event.replyToken, {
-              //   type: "text",
-              //   text: translationResult.translations[0].translation
-              // }));
-            })
-              // JUMP TO REPLY
-            })
-            // ;
-            // IDENTIRY LANGUAGE BY IBM TRANSLATOR
-
-            // TRANSACTION FOR WHRN ANY ERRORS HAPPENED
-            .catch(err => {
               error_res(err, events_processed, bot, event);
-            });
-            // ****************************************************************************************************************************
+            }
+
+
+
+
+    // ****************************************************************************************************************************
         }else if (event.type == "message" && event.message.type == "image"){
             events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
