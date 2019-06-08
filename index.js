@@ -54,31 +54,57 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
 
       //  *********************************************************************************************************************
-            // IF LANGUAGE IDENTIFIED
+            // (1) IF LANGUAGE IDENTIFIED
             .then(identifiedLanguages => {
               console.log(JSON.stringify(identifiedLanguages, null, 2));
               posted_lang.push(identifiedLanguages.languages[0].language);
               console.log(posted_lang[0]);
 
+              // (2) IF THE MESSAGE WAS ENGLISH
+              if(posted_lang[0] == "en"){
+                // PREPARE FOR TRANSLATION
+                var from_to = posted_lang[0] + '-es'
+                console.log(from_to)
+                const translateParams = {
+                text: event.message.text,
+                model_id: from_to,
+                };
 
-              // PREPARE FOR TRANSLATION
-              var from_to = posted_lang[0] + '-es'
-              console.log(from_to)
-              const translateParams = {
-              text: event.message.text,
-              model_id: from_to,
-              };
+                // REQUEST FOR 1ST TRANSLATION
+                languageTranslator.translate(translateParams)
 
-              // REQUEST FOR 1ST TRANSLATION
-              languageTranslator.translate(translateParams)
+                // 1ST TRANSLATION RESPOND
+                .then(translationResult => {
+                  res_message(translationResult,events_processed, bot, event);
+                });
+                .catch(err => {
+                  console.log('error:', err);
+                  error_res(err, events_processed, bot, event);
+                })
+              // (2) IF THE MESSAGE WAS ENGLISH
+              }else{
+                // PREPARE FOR TRANSLATION
+                var from_to = posted_lang[0] + '-es'
+                console.log(from_to)
+                const translateParams = {
+                text: event.message.text,
+                model_id: from_to,
+                };
 
-              // 1ST TRANSLATION RESPOND
-              .then(translationResult => {
-                res_message(translationResult,events_processed, bot, event);
-              })
-              })
+                // REQUEST FOR 1ST TRANSLATION
+                languageTranslator.translate(translateParams)
 
-            // IF LANGUAGE NOT IDENTIFIED
+                // 1ST TRANSLATION RESPOND
+                .then(translationResult => {
+                  res_message(translationResult,events_processed, bot, event);
+                })
+              }
+
+
+
+
+
+            // (1) IF LANGUAGE NOT IDENTIFIED
             .catch(err => {
               console.log('error:', err);
               error_res(err, events_processed, bot, event);
