@@ -53,7 +53,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
 
 
-      //  *********************************************************************************************************************
+            //  *********************************************************************************************************************
             // (1) IF LANGUAGE IDENTIFIED
             .then(identifiedLanguages => {
               console.log(JSON.stringify(identifiedLanguages, null, 2));
@@ -76,11 +76,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // 1ST TRANSLATION RESPOND
                 .then(translationResult => {
                   res_message(translationResult,events_processed, bot, event);
-                });
-                .catch(err => {
-                  console.log('error:', err);
-                  error_res(err, events_processed, bot, event);
                 })
+                .catch(err => {
+                  error_res(err, events_processed, bot, event);
+                });
               // (2) IF THE MESSAGE WAS ENGLISH
               }else{
                 // PREPARE FOR TRANSLATION
@@ -105,15 +104,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
 
             // (1) IF LANGUAGE NOT IDENTIFIED
-            .catch(err => {
-              console.log('error:', err);
+            }.catch(err => {
               error_res(err, events_processed, bot, event);
-            })
+            });
 
 
 
 
-    // ****************************************************************************************************************************
+          // ****************************************************************************************************************************
         }else if (event.type == "message" && event.message.type == "image"){
             events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
