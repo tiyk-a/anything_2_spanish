@@ -104,7 +104,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
 
             // (1) IF LANGUAGE NOT IDENTIFIED
-            }.catch(err => {
+            }).catch(err => {
               error_res(err, events_processed, bot, event);
             });
 
