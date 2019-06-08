@@ -80,10 +80,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 .catch(err => {
                   error_res(err, events_processed, bot, event);
                 });
-              // (2) IF THE MESSAGE WAS ENGLISH
+              // (2) IF THE MESSAGE WASN'T ENGLISH
               }else{
                 // PREPARE FOR TRANSLATION
-                var from_to = posted_lang[0] + '-es'
+                var from_to = posted_lang[0] + '-en'
                 console.log(from_to)
                 const translateParams = {
                 text: event.message.text,
@@ -93,10 +93,13 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // REQUEST FOR 1ST TRANSLATION
                 languageTranslator.translate(translateParams)
 
-                // 1ST TRANSLATION RESPOND
+                 // 1ST TRANSLATION RESPOND
                 .then(translationResult => {
                   res_message(translationResult,events_processed, bot, event);
                 })
+                .catch(err => {
+                  error_res(err, events_processed, bot, event);
+                });
               }
 
 
