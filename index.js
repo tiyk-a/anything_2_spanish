@@ -51,7 +51,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           languageTranslator.identify(identifyParams)
           .then(identifiedLanguages => {
             console.log(JSON.stringify(identifiedLanguages, null, 2));
-            posted_lang.push(identifiedLanguages.languages[0].language);
+            console.log(identifiedLanguages.body.languages)
+            posted_lang.push(identifiedLanguages.body.languages[0].language);
           })
           .catch(err => {
             console.log('error:', err);
@@ -59,11 +60,15 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           });
           // IDENTIRY LANGUAGE BY IBM TRANSLATOR
 
+          console.log(posted_lang)
+          console.log(posted_lang[0])
+
           // TRANSLATED BY IBM TRANSLATOR
           var from_to = posted_lang[0] + '-es'
-            const translateParams = {
-            text: event.message.text,
-            model_id: from_to,
+          console.log(from_to)
+          const translateParams = {
+          text: event.message.text,
+          model_id: from_to,
           };
 
           languageTranslator.translate(translateParams)
@@ -106,24 +111,3 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         }
     );
 });
-
-
-
-// const languageTranslator = new LanguageTranslatorV3({
-//   version: '2019-04-02',
-//   iam_apikey: process.env.IBM_KEY,
-//   url: 'https://gateway-wdc.watsonplatform.net/language-translator/api',
-// });
-
-// const translateParams = {
-//   text: 'Hello',
-//   model_id: 'en-es',
-// };
-
-// languageTranslator.translate(translateParams)
-//   .then(translationResult => {
-//     console.log(JSON.stringify(translationResult, null, 2));
-//   })
-//   .catch(err => {
-//     console.log('error:', err);
-//   });
