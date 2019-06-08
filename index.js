@@ -48,7 +48,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             text: event.message.text
           };
 
-          async languageTranslator.identify(identifyParams)
+          languageTranslator.identify(identifyParams)
             .then(identifiedLanguages => {
               console.log(JSON.stringify(identifiedLanguages, null, 2));
               console.log(identifiedLanguages.body.languages)
@@ -63,33 +63,33 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             console.log(posted_lang)
             console.log(posted_lang[0])
 
-            // TRANSLATED BY IBM TRANSLATOR
-            var from_to = posted_lang[0] + '-es'
-            console.log(from_to)
-            const translateParams = {
-            text: event.message.text,
-            model_id: from_to,
-            };
+          //   // TRANSLATE BY IBM TRANSLATOR
+          //   var from_to = posted_lang[0] + '-es'
+          //   console.log(from_to)
+          //   const translateParams = {
+          //   text: event.message.text,
+          //   model_id: from_to,
+          //   };
 
-          await languageTranslator.translate(translateParams)
+          // languageTranslator.translate(translateParams)
 
-            // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
-            .then(translationResult => {
-              console.log(JSON.stringify(translationResult, null, 2));
-              events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: translationResult.translations[0].translation
-              }));
-            })
+          //   // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
+          //   .then(translationResult => {
+          //     console.log(JSON.stringify(translationResult, null, 2));
+          //     events_processed.push(bot.replyMessage(event.replyToken, {
+          //       type: "text",
+          //       text: translationResult.translations[0].translation
+          //     }));
+          //   })
 
-            // TRANSACTION FOR WHRN ANY ERRORS HAPPENED
-            .catch(err => {
-              console.log('error:', err);
-              events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: "There's no need of translation, mi amor solo quedate aqui...!"
-              }));
-            });
+          //   // TRANSACTION FOR WHRN ANY ERRORS HAPPENED
+          //   .catch(err => {
+          //     console.log('error:', err);
+          //     events_processed.push(bot.replyMessage(event.replyToken, {
+          //       type: "text",
+          //       text: "There's no need of translation, mi amor solo quedate aqui...!"
+          //     }));
+          //   });
         }else if (event.type == "message" && event.message.type == "image"){
             events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
