@@ -60,28 +60,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
               posted_lang.push(identifiedLanguages.languages[0].language);
               console.log(posted_lang[0]);
 
-              // (2) IF THE MESSAGE WAS ENGLISH
-              if(posted_lang[0] == "en"){
-                // PREPARE FOR TRANSLATION
-                var from_to = posted_lang[0] + '-es'
-                console.log(from_to)
-                const translateParams = {
-                text: event.message.text,
-                model_id: from_to,
-                };
-
-                // REQUEST FOR 1ST TRANSLATION
-                languageTranslator.translate(translateParams)
-
-                // 1ST TRANSLATION RESPOND
-                .then(translationResult => {
-                  res_message(translationResult,events_processed, bot, event);
-                })
-                .catch(err => {
-                  error_res(err, events_processed, bot, event);
-                });
-              // (2) IF THE MESSAGE WASN'T ENGLISH
-              }else{
+              // (2) IF THE MESSAGE WASN'T ENGLISH, TRANSLATE INTO ENGLISH
+              if(posted_lang[0] != "en"){
                 // PREPARE FOR TRANSLATION
                 var from_to = posted_lang[0] + '-en'
                 console.log(from_to)
@@ -100,10 +80,27 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 .catch(err => {
                   error_res(err, events_processed, bot, event);
                 });
+              // (2) IF THE MESSAGE WAS ENGLISH, TRANSLATE IT INTO SPANISH
+              }else{
+                // PREPARE FOR TRANSLATION
+                var from_to = posted_lang[0] + '-es'
+                console.log(from_to)
+                const translateParams = {
+                text: event.message.text,
+                model_id: from_to,
+                };
+
+                // REQUEST FOR 1ST TRANSLATION
+                languageTranslator.translate(translateParams)
+
+                // 1ST TRANSLATION RESPOND
+                .then(translationResult => {
+                  res_message(translationResult,events_processed, bot, event);
+                })
+                .catch(err => {
+                  error_res(err, events_processed, bot, event);
+                });
               }
-
-
-
 
 
             // (1) IF LANGUAGE NOT IDENTIFIED
