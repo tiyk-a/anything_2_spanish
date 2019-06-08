@@ -107,11 +107,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             // TRANSACTION FOR WHRN ANY ERRORS HAPPENED
             .catch(err => {
-              console.log('error:', err);
-              events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: "There's no need of translation, mi amor solo quedate aqui...!"
-              }));
+              error_res(err, events_processed, bot, event);
             });
             // ****************************************************************************************************************************
         }else if (event.type == "message" && event.message.type == "image"){
@@ -135,3 +131,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         }
     );
 });
+
+function error_res(err, events_processed, bot, event){
+  console.log('error:', err);
+  events_processed.push(bot.replyMessage(event.replyToken, {
+    type: "text",
+    text: "There's no need of translation, mi amor solo quedate aqui...!"
+  }));
+}
