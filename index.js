@@ -82,7 +82,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             .catch(err => {
               console.log('error:', err);
               error_res(err, events_processed, bot, event);
-            }
+            })
 
 
 
