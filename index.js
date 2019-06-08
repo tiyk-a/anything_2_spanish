@@ -52,17 +52,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             .then(identifiedLanguages => {
               console.log(JSON.stringify(identifiedLanguages, null, 2));
               posted_lang.push(identifiedLanguages.languages[0].language);
-              console.log(posted_lang[0])
-            })
-            .catch(err => {
-              console.log('error:', err);
-              posted_lang.push('en');
-              console.log(posted_lang[0])
-            });
-            // IDENTIRY LANGUAGE BY IBM TRANSLATOR
+              console.log(posted_lang[0]);
 
-
-            // TRANSLATE BY IBM TRANSLATOR
+              // JUMP TO REPLY
+              // TRANSLATE BY IBM TRANSLATOR
             var from_to = posted_lang[0] + '-es'
             console.log(from_to)
             const translateParams = {
@@ -80,6 +73,56 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 text: translationResult.translations[0].translation
               }));
             })
+              // JUMP TO REPLY
+            })
+            .catch(err => {
+              console.log('error:', err);
+              posted_lang.push('en');
+              console.log(posted_lang[0])
+
+              // JUMP TO REPLY
+              // TRANSLATE BY IBM TRANSLATOR
+            var from_to = posted_lang[0] + '-es'
+            console.log(from_to)
+            const translateParams = {
+            text: event.message.text,
+            model_id: from_to,
+            };
+
+          languageTranslator.translate(translateParams)
+
+            // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
+            .then(translationResult => {
+              console.log(JSON.stringify(translationResult, null, 2));
+              events_processed.push(bot.replyMessage(event.replyToken, {
+                type: "text",
+                text: translationResult.translations[0].translation
+              }));
+            })
+              // JUMP TO REPLY
+            })
+            // ;
+            // IDENTIRY LANGUAGE BY IBM TRANSLATOR
+
+
+          //   // TRANSLATE BY IBM TRANSLATOR
+          //   var from_to = posted_lang[0] + '-es'
+          //   console.log(from_to)
+          //   const translateParams = {
+          //   text: event.message.text,
+          //   model_id: from_to,
+          //   };
+
+          // languageTranslator.translate(translateParams)
+
+          //   // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
+          //   .then(translationResult => {
+          //     console.log(JSON.stringify(translationResult, null, 2));
+          //     events_processed.push(bot.replyMessage(event.replyToken, {
+          //       type: "text",
+          //       text: translationResult.translations[0].translation
+          //     }));
+          //   })
 
             // TRANSACTION FOR WHRN ANY ERRORS HAPPENED
             .catch(err => {
