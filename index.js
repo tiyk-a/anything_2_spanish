@@ -48,30 +48,30 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             text: event.message.text
           };
 
-          languageTranslator.identify(identifyParams)
-          .then(identifiedLanguages => {
-            console.log(JSON.stringify(identifiedLanguages, null, 2));
-            console.log(identifiedLanguages.body.languages)
-            posted_lang.push(identifiedLanguages.body.languages[0].language);
-          })
-          .catch(err => {
-            console.log('error:', err);
-            posted_lang.push('en');
-          });
-          // IDENTIRY LANGUAGE BY IBM TRANSLATOR
+          async languageTranslator.identify(identifyParams)
+            .then(identifiedLanguages => {
+              console.log(JSON.stringify(identifiedLanguages, null, 2));
+              console.log(identifiedLanguages.body.languages)
+              posted_lang.push(identifiedLanguages.body.languages[0].language);
+            })
+            .catch(err => {
+              console.log('error:', err);
+              posted_lang.push('en');
+            });
+            // IDENTIRY LANGUAGE BY IBM TRANSLATOR
 
-          console.log(posted_lang)
-          console.log(posted_lang[0])
+            console.log(posted_lang)
+            console.log(posted_lang[0])
 
-          // TRANSLATED BY IBM TRANSLATOR
-          var from_to = posted_lang[0] + '-es'
-          console.log(from_to)
-          const translateParams = {
-          text: event.message.text,
-          model_id: from_to,
-          };
+            // TRANSLATED BY IBM TRANSLATOR
+            var from_to = posted_lang[0] + '-es'
+            console.log(from_to)
+            const translateParams = {
+            text: event.message.text,
+            model_id: from_to,
+            };
 
-          languageTranslator.translate(translateParams)
+          await languageTranslator.translate(translateParams)
 
             // TRANSACTION WHEN SUCCESSFULLY GOT TRANSLATION
             .then(translationResult => {
