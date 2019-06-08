@@ -51,17 +51,19 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           languageTranslator.identify(identifyParams)
             .then(identifiedLanguages => {
               console.log(JSON.stringify(identifiedLanguages, null, 2));
-              console.log(identifiedLanguages.body.languages)
-              posted_lang.push(identifiedLanguages.body.languages[0].language);
+              console.log(identifiedLanguages.languages)
+              posted_lang.push(identifiedLanguages.languages[0].language);
+              console.log(posted_lang)
+              console.log(posted_lang[0])
             })
             .catch(err => {
               console.log('error:', err);
               posted_lang.push('en');
+              console.log(posted_lang)
+              console.log(posted_lang[0])
             });
             // IDENTIRY LANGUAGE BY IBM TRANSLATOR
 
-            console.log(posted_lang)
-            console.log(posted_lang[0])
 
           //   // TRANSLATE BY IBM TRANSLATOR
           //   var from_to = posted_lang[0] + '-es'
