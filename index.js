@@ -49,16 +49,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           };
 
           languageTranslator.identify(identifyParams)
-
-
-
-
-            //  *********************************************************************************************************************
+//  *********************************************************************************************************************
             // (1) IF LANGUAGE IDENTIFIED
             .then(identifiedLanguages => {
               console.log(JSON.stringify(identifiedLanguages, null, 2));
               posted_lang.push(identifiedLanguages.languages[0].language);
-
               // (2) IF THE MESSAGE WASN'T ENGLISH, TRANSLATE INTO ENGLISH
               if(posted_lang[0] != "en"){
                 // PREPARE FOR TRANSLATION
@@ -74,22 +69,26 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                  // 1ST TRANSLATION RESPOND
                  // (3) IF THE MESSAGE CAN BE TRANSLATED INTO SPANISH
                   .then(translationResult => {
-                    // PREPARE FOR TRANSLATION
-                    const translateParams = {
-                    text: translationResult.translations[0].translation,
-                    model_id: 'en-es',
-                    };
+                    // ************ TEST ADDED ************
+                    english_inter(translationResult.translations[0].translation);
+                    // ************ TEST ADDED ************
 
-                    // REQUEST FOR 2ND TRANSLATION
-                    languageTranslator.translate(translateParams)
+                    // // PREPARE FOR TRANSLATION
+                    // const translateParams = {
+                    // text: translationResult.translations[0].translation,
+                    // model_id: 'en-es',
+                    // };
 
-                    // 2ND TRANSLATION RESPOND
-                    .then(translationResult => {
-                      res_message(translationResult,events_processed, bot, event);
-                    })
-                    .catch(err => {
-                      error_res(err, events_processed, bot, event);
-                    });
+                    // // REQUEST FOR 2ND TRANSLATION
+                    // languageTranslator.translate(translateParams)
+
+                    // // 2ND TRANSLATION RESPOND
+                    // .then(translationResult => {
+                    //   res_message(translationResult,events_processed, bot, event);
+                    // })
+                    // .catch(err => {
+                    //   error_res(err, events_processed, bot, event);
+                    // });
                   })
                 // (3) IF THE MESSAGE CAN'T BE TRANSLATED INTO SPANISH
                   .catch(err => {
@@ -97,35 +96,109 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                   });
               // (2) IF THE MESSAGE WAS ENGLISH, TRANSLATE IT INTO SPANISH
               }else{
-                // PREPARE FOR TRANSLATION
-                var from_to = posted_lang[0] + '-es'
-                const translateParams = {
-                text: event.message.text,
-                model_id: from_to,
-                };
 
-                // REQUEST FOR 1ST TRANSLATION
-                languageTranslator.translate(translateParams)
+                // ************ TEST ADDED ************
+                english_inter(event.message.text);
+                // ************ TEST ADDED ************
 
-                // 1ST TRANSLATION RESPOND
-                .then(translationResult => {
-                  res_message(translationResult,events_processed, bot, event);
-                })
-                .catch(err => {
-                  error_res(err, events_processed, bot, event);
-                });
+                // // PREPARE FOR TRANSLATION
+                // const translateParams = {
+                // text: event.message.text,
+                // model_id: 'en-es',
+                // };
+
+                // // REQUEST FOR 1ST TRANSLATION
+                // languageTranslator.translate(translateParams)
+
+                // // 1ST TRANSLATION RESPOND
+                // .then(translationResult => {
+                //   res_message(translationResult,events_processed, bot, event);
+                // })
+                // .catch(err => {
+                //   error_res(err, events_processed, bot, event);
+                // });
               }
-
-
             // (1) IF LANGUAGE NOT IDENTIFIED
             }).catch(err => {
               error_res(err, events_processed, bot, event);
             });
-
-
-
-
           // ****************************************************************************************************************************
+
+
+
+          //   //  *********************************************************************************************************************
+          //   // (1) IF LANGUAGE IDENTIFIED
+          //   .then(identifiedLanguages => {
+          //     console.log(JSON.stringify(identifiedLanguages, null, 2));
+          //     posted_lang.push(identifiedLanguages.languages[0].language);
+
+          //     // (2) IF THE MESSAGE WASN'T ENGLISH, TRANSLATE INTO ENGLISH
+          //     if(posted_lang[0] != "en"){
+          //       // PREPARE FOR TRANSLATION
+          //       var from_to = posted_lang[0] + '-en'
+          //       const translateParams = {
+          //       text: event.message.text,
+          //       model_id: from_to,
+          //       };
+
+          //       // REQUEST FOR 1ST TRANSLATION
+          //       languageTranslator.translate(translateParams)
+
+          //        // 1ST TRANSLATION RESPOND
+          //        // (3) IF THE MESSAGE CAN BE TRANSLATED INTO SPANISH
+          //         .then(translationResult => {
+          //           // PREPARE FOR TRANSLATION
+          //           const translateParams = {
+          //           text: translationResult.translations[0].translation,
+          //           model_id: 'en-es',
+          //           };
+
+          //           // REQUEST FOR 2ND TRANSLATION
+          //           languageTranslator.translate(translateParams)
+
+          //           // 2ND TRANSLATION RESPOND
+          //           .then(translationResult => {
+          //             res_message(translationResult,events_processed, bot, event);
+          //           })
+          //           .catch(err => {
+          //             error_res(err, events_processed, bot, event);
+          //           });
+          //         })
+          //       // (3) IF THE MESSAGE CAN'T BE TRANSLATED INTO SPANISH
+          //         .catch(err => {
+          //           error_res(err, events_processed, bot, event);
+          //         });
+          //     // (2) IF THE MESSAGE WAS ENGLISH, TRANSLATE IT INTO SPANISH
+          //     }else{
+          //       // PREPARE FOR TRANSLATION
+          //       var from_to = posted_lang[0] + '-es'
+          //       const translateParams = {
+          //       text: event.message.text,
+          //       model_id: from_to,
+          //       };
+
+          //       // REQUEST FOR 1ST TRANSLATION
+          //       languageTranslator.translate(translateParams)
+
+          //       // 1ST TRANSLATION RESPOND
+          //       .then(translationResult => {
+          //         res_message(translationResult,events_processed, bot, event);
+          //       })
+          //       .catch(err => {
+          //         error_res(err, events_processed, bot, event);
+          //       });
+          //     }
+
+
+          //   // (1) IF LANGUAGE NOT IDENTIFIED
+          //   }).catch(err => {
+          //     error_res(err, events_processed, bot, event);
+          //   });
+
+
+
+
+          // // ****************************************************************************************************************************
         }else if (event.type == "message" && event.message.type == "image"){
             events_processed.push(bot.replyMessage(event.replyToken, {
                 type: "text",
@@ -155,7 +228,7 @@ function error_res(err, events_processed, bot, event){
   console.log('error:', err);
   events_processed.push(bot.replyMessage(event.replyToken, {
     type: "text",
-    text: "There's no need of translation, mi amor solo quedate aqui...!"
+    text: "Lo siento no te entiendo..."
   }));
 };
 
@@ -166,3 +239,22 @@ function res_message(translationResult,events_processed, bot, event){
     text: translationResult.translations[0].translation
   }));
 };
+
+function english_inter(text){
+  // PREPARE FOR TRANSLATION
+  const translateParams = {
+  text: event.message.text,
+  model_id: 'en-es',
+  };
+
+  // REQUEST FOR 1ST TRANSLATION
+  languageTranslator.translate(translateParams)
+
+  // 1ST TRANSLATION RESPOND
+  .then(translationResult => {
+    res_message(translationResult,events_processed, bot, event);
+  })
+  .catch(err => {
+    error_res(err, events_processed, bot, event);
+  });
+}
