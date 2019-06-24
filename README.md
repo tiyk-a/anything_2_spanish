@@ -1,9 +1,6 @@
-# anything_2_spanish -- Spanish translation bot for LINE
+# 何語でもスペイン語に訳してくれるLINE botです:dizzy:
 ![esbot](https://github.com/tiyk-a/images/blob/master/lbot.png "image")
 
-¡¡Translate Any Languages Into Español!!
-
-何語をインプットしてもスペイン語に訳してくれるLINE botです:dizzy:
 
 ## :grey_exclamation:Description
 送信されたメッセージのスペイン語訳を返信してくれるLINE botです。
