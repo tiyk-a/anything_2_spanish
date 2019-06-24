@@ -8,6 +8,8 @@
 
 ## :speech_balloon:Usage
 1. botのトーク画面へ
+
+![esbot-QRcode](https://github.com/tiyk-a/images/blob/master/lbot_qr.png "QRcode")
 - LINEのお友達追加からQRコードを読み取る
 - コードが読み込まれたらトークへ
 - お友達追加をしていただくとグループトークに追加して使用することもできます
