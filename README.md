@@ -28,4 +28,4 @@
 - IBM Watson Language Translator (https://www.ibm.com/watson/services/language-translator/)
 
 ## Languages & Frameworks
-- :page_with_curl:Node.js
+- :page_with_curl:Node.js 10.16.0
