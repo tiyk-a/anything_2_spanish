@@ -126,18 +126,19 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
 
           // ****************************************************************************************************************************
-        }else if (event.type == "message" && event.message.type == "image"){
-            events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: "I got you lovely image!"
-            }));
-
-        }else if (event.type == "message" && event.message.type == "sticker"){
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                type: "text",
-                text: "Wow received you lovely sticker!!!"
-            }));
         }
+        // else if (event.type == "message" && event.message.type == "image"){
+            // events_processed.push(bot.replyMessage(event.replyToken, {
+            //     type: "text",
+            //     text: "I got you lovely image!"
+            // }));
+
+        // }else if (event.type == "message" && event.message.type == "sticker"){
+        //         events_processed.push(bot.replyMessage(event.replyToken, {
+        //         type: "text",
+        //         text: "Wow received you lovely sticker!!!"
+        //     }));
+        // }
     });
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
