@@ -128,17 +128,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
           // ****************************************************************************************************************************
         }
         // else if (event.type == "message" && event.message.type == "image"){
-<<<<<<< HEAD
         //     events_processed.push(bot.replyMessage(event.replyToken, {
         //         type: "text",
         //         text: "I got you lovely image!"
         //     }));
-=======
-            // events_processed.push(bot.replyMessage(event.replyToken, {
-            //     type: "text",
-            //     text: "I got you lovely image!"
-            // }));
->>>>>>> 713badc5edc3ac4dcb728ee21e5513fcb8cfda4a
 
         // }else if (event.type == "message" && event.message.type == "sticker"){
         //         events_processed.push(bot.replyMessage(event.replyToken, {
