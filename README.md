@@ -1,6 +1,9 @@
 # 何語でもスペイン語に訳してくれるLINE botです:dizzy:
 ![esbot](https://github.com/tiyk-a/images/blob/master/lbot.png "image")
 
+## Update
+2022/08/29: Herokuデプロイしてたのを閉じました。公開サーバーなし
+https://esbot-line.herokuapp.com/
 
 ## :grey_exclamation:Description
 送信されたメッセージのスペイン語訳を返信してくれるLINE botです。
